@@ -1,0 +1,17 @@
+<!doctype html><meta charset="utf-8">
+<title>Spotify Callback</title>
+<script>
+  (function () {
+    const p = new URL(location.href).searchParams;
+    const code  = p.get("code");
+    const error = p.get("error");
+    try {
+      if (window.opener && (code || error)) {
+        // post back to the opener; origin checked by the userscript
+        window.opener.postMessage({ type: "SPOTIFY_AUTH_CODE", code, error }, "*");
+      }
+    } catch (e) {}
+    document.body.textContent = code ? "Authorization complete. You can close this window." :
+                                      ("Error: " + (error || "unknown"));
+  })();
+</script>
